@@ -1,12 +1,20 @@
 'use strict';
 
-juke.factory('PlayerFactory', function(){
+juke.factory('PlayerFactory', function($http, $rootScope){
   // non-UI logic in here
   var audio = document.createElement('audio');
   var playing = false;
   var currentSong = null;
   var songListGlobal = null;
   var currentIndex;
+
+  var progress = 0;
+  audio.addEventListener('ended', this.next);
+  audio.addEventListener('timeupdate', function () {
+    progress = 100 * audio.currentTime / audio.duration;
+    $rootScope.$digest();
+  });
+  
 
   return {
   	start: function(song, songList) {
@@ -16,8 +24,8 @@ juke.factory('PlayerFactory', function(){
 
   		if (songList) {
   			songListGlobal = songList;
-  			currentIndex = songList.indexOf(song);
-  		}
+  		  currentIndex = songList.indexOf(song);
+      }
 
   		audio.src = song.audioUrl;
   		audio.load();
@@ -38,7 +46,7 @@ juke.factory('PlayerFactory', function(){
   		return playing;
   	},
   	getCurrentSong: function() {
-  		return currentSong;
+      return currentSong;
   	},
   	next: function() {
   		if (currentIndex === songListGlobal.length - 1) {
@@ -46,22 +54,40 @@ juke.factory('PlayerFactory', function(){
   		} else {
   			currentIndex++;
   		}
-
-  		this.start(songListGlobal[currentIndex])
+  		this.start(songListGlobal[currentIndex]);
   	},
-  	previous: function() {
+  	prev: function() {
 		if (currentIndex === 0) {
   			currentIndex = songListGlobal.length - 1;
   		} else {
   			currentIndex--;
   		}
 
-  		this.start(songListGlobal[currentIndex])
+  		this.start(songListGlobal[currentIndex]);
   	},
   	getProgress: function() {
   		if (!playing) return 0;
+      else return progress;
 
-  		return audio.currentTime / audio.duration;
-  	}
+    
+  
+    },
+
+    httpGetter: function () {
+      return $http.get('/api/albums/')
+      .then(res => $http.get('/api/albums/' + res.data[1]._id))
+      .then(res => res.data)
+      .then(album => {
+        album.imageUrl = '/api/albums/' + album._id + '.image';
+        album.songs.forEach(function (song, i) {
+          song.audioUrl = '/api/songs/' + song._id + '.audio';
+          song.albumIndex = i;
+        });
+        return album;
+      });
+    }
+
+
+
   }
 });

@@ -2,31 +2,26 @@
 
 juke.controller('PlayerCtrl', function ($scope, $rootScope, PlayerFactory) {
 
-  // initialize audio player (note this kind of DOM stuff is odd for Angular)
+// initialize audio player (note this kind of DOM stuff is odd for Angular)
 
-  // audio.addEventListener('ended', $scope.next);
+// state
+$scope.hasCurrentSong = PlayerFactory.getCurrentSong;
+$scope.ctrlGetProgress = PlayerFactory.getProgress;
+$scope.next = PlayerFactory.next.bind(PlayerFactory);
+$scope.prev = PlayerFactory.prev.bind(PlayerFactory);
 
-  // audio.addEventListener('timeupdate', function () {
-  //   $scope.progress = 100 * audio.currentTime / audio.duration;
-  //   $scope.$digest(); // no Angular-aware code is doing this for us here
-  // });
-
-  // state
 
   // main toggle
   $scope.toggle = function (song) {
     if (PlayerFactory.isPlaying()) {
-     PlayerFactory.pause();
+      PlayerFactory.pause();
     }  else {
       PlayerFactory.start(song);
     }
-      $scope.currentSong = PlayerFactory.getCurrentSong();
-      $scope.playing = PlayerFactory.isPlaying();
-  }
-
-  $scope.next = PlayerFactory.next;
-  $scope.prev = PlayerFactory.prev;
-  
+    $scope.currentSong = PlayerFactory.getCurrentSong();
+    $scope.playing = PlayerFactory.isPlaying();
+  };
+ 
 });
 
   // incoming events (from Album or toggle)

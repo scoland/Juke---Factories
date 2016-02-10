@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
     <title>Juke</title>
     <link href="/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="/bootstrap-dark.css" rel="stylesheet" />
@@ -10,6 +11,7 @@
     <script src="/js/player/player.factory.js" defer></script>
     <script src="/js/album/album.controllers.js" defer></script>
     <script src="/js/player/player.controller.js" defer></script>
+
   </head>
   <body ng-app="juke">
     <div id="main" class="container-fluid">
@@ -41,7 +43,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="song in album.songs" ng-class="{active: song === currentSong}">
+              <tr ng-repeat="song in album.songs" ng-class="{active: song._id === hasCurrentSong()._id}">
                 <td>
                   <button class="btn btn-default btn-xs" ng-click="toggle(song)">
                     <span class="glyphicon" ng-class="{'glyphicon-pause': playing && song === currentSong, 'glyphicon-play': song !== currentSong || !playing}"></span>
@@ -57,7 +59,7 @@
       </div>
 
       <footer>
-        <div ng-show="currentSong" ng-controller="PlayerCtrl">
+        <div ng-controller="PlayerCtrl" ng-show="hasCurrentSong()">
           <div class="pull-left">
             <button class="btn btn-default" ng-click="prev()">
               <span class="glyphicon glyphicon-step-backward"></span>
@@ -71,7 +73,7 @@
           </div>
           <div class="bar">
             <div class="progress">
-              <div class="progress-bar" ng-style="{width: progress + '%'}"></div>
+              <div class="progress-bar" ng-style="{width: ctrlGetProgress() + '%'}"></div>
             </div>
           </div>
         </div>

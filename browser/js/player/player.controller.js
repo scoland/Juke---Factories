@@ -9,7 +9,7 @@ $scope.hasCurrentSong = PlayerFactory.getCurrentSong;
 $scope.ctrlGetProgress = PlayerFactory.getProgress;
 $scope.next = PlayerFactory.next.bind(PlayerFactory);
 $scope.prev = PlayerFactory.prev.bind(PlayerFactory);
-
+$scope.isPlaying = PlayerFactory.isPlaying;
 
   // main toggle
   $scope.toggle = function (song) {

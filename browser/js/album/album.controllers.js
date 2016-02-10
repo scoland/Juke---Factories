@@ -7,8 +7,8 @@ juke.controller('AlbumCtrl', function($scope, $http, $log, PlayerFactory) {
                .catch(function(err){$log.error(err);});
 
 // lesson: you have to understand how the MVC mechanics work and how they reference certain data types throughout the application. Being able follow the path in which data is transfered between the M-V-C, is incredibly improtant... sean is cool... 
-$scope.hasCurrentSong = PlayerFactory.getCurrentSong;
-
+$scope.isPlaying = PlayerFactory.isPlaying;
+$scope.getCurrentSong = PlayerFactory.getCurrentSong;
   // main toggle
   $scope.toggle = function (song) {
     if (PlayerFactory.isPlaying() && song === PlayerFactory.getCurrentSong()) {

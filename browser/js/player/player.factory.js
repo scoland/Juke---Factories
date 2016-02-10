@@ -68,9 +68,6 @@ juke.factory('PlayerFactory', function($http, $rootScope){
   	getProgress: function() {
   		if (!playing) return 0;
       else return progress;
-
-    
-  
     },
 
     httpGetter: function () {
@@ -85,9 +82,16 @@ juke.factory('PlayerFactory', function($http, $rootScope){
         });
         return album;
       });
+    },
+
+    albumsGetter: function() {
+      return $http.get('/api/albums')
+       .then(function(response) {
+           return response.data.map(function(album) {
+                     album.imageUrl = '/api/albums/' + album._id + '.image';
+                     return album;
+                 });
+       });
     }
-
-
-
   }
 });
